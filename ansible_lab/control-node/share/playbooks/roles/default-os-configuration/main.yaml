@@ -1,0 +1,10 @@
+---
+- name: Upgrade O.S. packets
+  yum:
+    name: '*'
+    state: latest
+- name: git client installation
+    yum:
+      name: git
+      state: latest
+      
