@@ -10,16 +10,6 @@
     - dbname: "db01"
     - dbusername: "root"
     - dbpassword: "devopsmaonamassa"
-  tasks:
-    - name: Configure ansible lab hosts
-      lineinfile: 
-        dest: /etc/hosts
-        state: present
-        line: "{{item}}"
-      with_items:
-        - 10.10.0.2 control-node
-        - 10.10.0.3 app01
-        - 10.10.0.4 db01
   roles:
     - default-os-configuration
     - role: geerlingguy.mysql
