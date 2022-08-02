@@ -1,0 +1,12 @@
+[Unit]
+Description=Notes Application
+After=network.target
+
+[Service]
+User=app
+WorkingDirectory=/opt/notes
+ExecStart=/usr/bin/java -jar -Djava.awt.headless=true -Djava.security.egs=file:/dev/./urandom /opt/notes/target/easy-note-{{app_version.stdout}}.jar
+SysLogIdentifier=notes-%i
+
+[Install]
+WantedBy=multi-user.target
