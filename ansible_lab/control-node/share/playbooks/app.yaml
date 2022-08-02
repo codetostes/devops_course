@@ -17,13 +17,22 @@
         comment: Application user
         uid: 500
 
-    #- name: Maven Installation
-    #  yum:
-    #    name: maven
-    #    state: latest
+    - name: Notes app directory criation
+      file:
+        path: /opt/notes/
+        state: directory
+        owner: app
+        group: app
 
-    - name: 
-      get_url: Maven download
+    - name: Clone Notes repository
+      git:
+        repo: https://github.com/callicoder/spring-boot-mysql-rest-api-tutorial.git
+        dest: /opt/notes/
+        clone: yes
+        force: yes
+          
+    - name: Maven download
+      get_url: 
         url: https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.1.0/apache-maven-3.1.0-bin.tar.gz
         dest: /opt/notes/apache-maven-3.1.0-bin.tar.gz
    
@@ -37,26 +46,12 @@
       yum:
         name: java-1.8.0-openjdk
         state: latest
-   
-    - name: Notes app directory criation
-      file:
-        path: /opt/notes
-        state: directory
-        owner: app
-        group: app
-   
+    
     - name: git client installation
       yum:
         name: git
         state: latest
-   
-    - name: Clone Notes repository
-      git:
-        repo: 'https://github.com/callicoder/spring-boot-mysql-rest-api-tutorial.git'
-        dest: /opt/notes
-        clone: yes
-        force: yes
-   
+     
     - name: Replace 'pom.xml'
       template:
         src: pom.xml
