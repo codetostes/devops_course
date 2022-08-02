@@ -2,6 +2,7 @@
 .vagrant/
 
 # FILES
+.DS_Store
 
 # EXTENSIONS
-*.log
+.log
