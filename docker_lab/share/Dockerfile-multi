@@ -1,6 +1,7 @@
 FROM maven:3.5-jdk-8-alpine as buildstage
-RUN mkdir /opt/note
+RUN mkdir -p /opt/note
 WORKDIR /opt/note
+RUN apk --update add git
 RUN git clone https://github.com/callicoder/spring-boot-mysql-rest-api-tutorial.git /opt/note
 COPY pom.xml /opt/note/
 RUN mvn package -Dmaven.test.skip=true
