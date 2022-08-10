@@ -9,6 +9,7 @@
     - dbname: "notes"
     - dbusername: "notesapp"
     - dbpassword: "devopsmaonamassa"
+    - mavenversion: 3.1.0
  
   tasks:
     - name: Add app User
@@ -24,6 +25,16 @@
         owner: app
         group: app
 
+    - name: Java Installation
+      yum:
+        name: java-1.8.0-openjdk-devel
+        state: latest
+    
+    - name: git client installation
+      yum:
+        name: git
+        state: latest
+
     - name: Clone Notes repository
       git:
         repo: https://github.com/callicoder/spring-boot-mysql-rest-api-tutorial.git
@@ -33,25 +44,15 @@
           
     - name: Maven download
       get_url: 
-        url: https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.1.0/apache-maven-3.1.0-bin.tar.gz
-        dest: /opt/notes/apache-maven-3.1.0-bin.tar.gz
+        url: https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/{{mavenversion}}/apache-maven-{{mavenversion}}-bin.tar.gz
+        dest: /opt/notes/apache-maven-{{mavenversion}}-bin.tar.gz
    
     - name: Maven package extraction
       ansible.builtin.unarchive:
-        src: /opt/notes/apache-maven-3.1.0-bin.tar.gz
+        src: /opt/notes/apache-maven-{{mavenversion}}-bin.tar.gz
         dest: /opt/
         remote_src: yes
-   
-    - name: Java Installation
-      yum:
-        name: java-1.8.0-openjdk
-        state: latest
-    
-    - name: git client installation
-      yum:
-        name: git
-        state: latest
-     
+
     - name: Replace 'pom.xml'
       template:
         src: pom.xml
@@ -63,13 +64,13 @@
         dest: /opt/notes/src/main/resources/application.properties
    
     - name: Make application package
-      command: /opt/apache-maven-3.1.0/bin/mvn -f /opt/notes/pom.xml package
+      command: /opt/apache-maven-{{mavenversion}}/bin/mvn -f /opt/notes/pom.xml package -Dmaven.test.skip=true
       become_user: app
    
     - name: Register package version
       shell:
-        #cmd:mvn -o -q -Dexec.executable=echo -Dexec.args='${project.version}' exec:exec
-        cmd: /opt/apache-maven-3.1.0/bin/mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpresssion=project.version | grep -v '\['
+        #cmd: /opt/apache-maven-{{mavenversion}}/bin/mvn -o -q -Dexec.executable=echo -Dexec.args='${project.version}' exec:exec
+        cmd: /opt/apache-maven-{{mavenversion}}/bin/mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpresssion=project.version
         chdir: /opt/notes/
       register: app_version
    
