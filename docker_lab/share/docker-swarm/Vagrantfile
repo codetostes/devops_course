@@ -1,0 +1,26 @@
+Vagrant.configure("2") do |config|
+
+    config.vm.provision "shell", inline "Echo Config swarm nodes..."
+    config.vm.define "manager" do |manager|
+        manager.vm.box = "centos/7"
+        manager.hostname = "manager"
+        manager.provision "shell", path: "provision.sh"
+        manager.vm.network "private_network", ip: "10.10.0.2"
+        manager.vm.network "forwarded_port", guest: 80 host: 8090
+
+    end
+
+    config.vm.define "worker1" do |worker1|
+        worker1.vm.box = "centos/7"
+        worker1.hostname = "worker1"
+        worker1.provision "shell", path: "provision.sh"
+        worker1.vm.network "private_network", ip: "10.10.0.3"
+    end
+
+    config.vm.define "worker2" do |worker2|
+        worker2.vm.box = "centos/7"
+        worker2.hostname = "worker2"
+        worker2.provision "shell", path: "provision.sh"
+        worker2.vm.network "private_network", ip: "10.10.0.4"
+    end
+end
