@@ -1,0 +1,22 @@
+### DOCKER COMPOSE ###
+# Install Docker_Compose
+./install-compose.hs
+
+
+# Clean Ambient
+docker system prune
+docker volume prune
+docker rm -f $build$
+docker network rm $network$
+
+# Start / Stop Enviroment
+docker-compose up
+docker-compose down
+
+#Test appication
+curl http://localhost:8080/
+
+
+### DOCKER SWARM ###
+#Build Environment
+vagrant up #(slow process)
