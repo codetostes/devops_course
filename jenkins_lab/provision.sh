@@ -1,11 +1,14 @@
 #/bin/bash
+
+# Install dependant applications
+yum install yum-utils epel-release git wget java-11-openjdk-devel -y 
+
 # Add jenkins and docker repositories
 wget --no-check-certificate -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 
-# Install applications. Dependante + core (Jenkins and Docker)
-yum install yum-utils epel-release git wget java-11-openjdk-devel -y 
+#Install core applications
 yum install jenkins docker-ce docker-ce-cli containerd.io -y
 
 # Install Docker compose
