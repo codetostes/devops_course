@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    stages{
+        stage('Docker image build'){
+            steps{
+                sh 'docker-build -t devops/app .'
+            }
+        }
+        stage('Up test containers- redis and app'){
+            steps{
+                sh 'docker-compose up --build -d'
+            }
+        }
+        stage('Wait for container go up'){
+            steps{
+                sh 'sleep 15'
+            }
+        }
+        stage('application test'){
+            steps{
+                sh 'chmod +x test-app.sh'
+                sh './test-app.sh'
+            }            
+        }
+        stage('Shutdown test containers'){
+            steps{
+                sh 'docker-compose down'
+            }            
+        }
+
+}
