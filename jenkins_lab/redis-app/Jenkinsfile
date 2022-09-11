@@ -3,7 +3,7 @@ pipeline {
     stages{
         stage('Docker image build'){
             steps{
-                sh 'docker-build -t devops/app .'
+                sh 'docker build -t devops/app .'
             }
         }
         stage('Up test containers- redis and app'){
