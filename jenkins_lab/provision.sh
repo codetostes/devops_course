@@ -1,20 +1,29 @@
 #/bin/bash
 
 # Install dependant applications
-yum install yum-utils epel-release git wget java-11-openjdk-devel -y 
+curl -sL https://rpm.nodesource.com/setup_10.x | sudo bash -
+yum install yum-utils epel-release git wget unzip java-11-openjdk-devel nodejs -y 
 
-# Add jenkins and docker repositories
+# Install Jenkins
 wget --no-check-certificate -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat/jenkins.io.key
-yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install jenkins -y
 
-#Install core applications
-yum install jenkins docker-ce docker-ce-cli containerd.io -y
+# Install Docker
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum install docker-ce docker-ce-cli containerd.io -y
 
 # Install Docker compose
 curl -L "https://github.com/docker/compose/releases/download/1.25.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose 
+
+# Install Sonar-Scanner
+wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.7.0.2747-linux.zip
+unzip sonar-scanner-cli-4.7.0.2747-linux.zip -d /opt/
+mv /opt/sonar-scanner-4.7.0.2747-linux /opt/sonar-scanner
+chown -R jenkins:jenkins /opt/sonar-scanner
+echo 'export PATH=$PATH:/opt/sonar-scanner/bin' | sudo tee -a /etc/profile
 
 # Give jenkins permission to run docker
 usermod -aG docker jenkins
