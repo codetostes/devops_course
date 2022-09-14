@@ -22,17 +22,14 @@ pipeline {
                     scannerHome = tool 'sonar-scanner';
                 }
                 withSonarQubeEnv('sonar-server'){
-                    sh "${scannerHome}/bin/sonar-scanner / 
-                    -Dsonar.ProjectKey=redis-app /
-                    -Dsonar.sources=. /
-                    -Dsonar.host.url=${env.SONAR_HOST_URL} /
-                    -Dsonar.login=${env.SONAR_TOKEN_AUTH}"
+                    sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=redis-app -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
 
                 }
             }
         }
         stage('QualityGate'){
             steps{
+                sleep (10)
                 waitForQualityGate abortPipeline: true
             }
         }
