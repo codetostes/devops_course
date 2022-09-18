@@ -1,5 +1,5 @@
 --- ## Deployment Object
-apiVersison: apps/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
     name: redis-server
@@ -15,16 +15,16 @@ spec:
         metadata:
             labels:
                 app: redis
-    spec:
-        containers:
-            -   name: redis-server
-                image: redis
-                resources:
-                    requests:
-                        cpu: 100m
-                        Mmemory: 100Mi
-                ports:
-                -   containterPort: 6379
+        spec:
+            containers:
+                -   name: redis-server
+                    image: redis
+                    resources:
+                        requests:
+                            cpu: 100m
+                            Mmemory: 100Mi
+                    ports:
+                    -   containterPort: 6379
 --- ## Service Object
 apiVersion: v1
 kind: Service
