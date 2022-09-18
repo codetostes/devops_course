@@ -1,26 +1,7 @@
-#Run on Jenkins
-docker volume create --name nexus-data
-docker run -d -p 8091:8081 -p 8123:8123 --name nexus -c nexus-data:/nexus-data somatype3
-docker logs -f nexus
-docker exec -t bash
-cat nexus-data/admin.password
-
-{config nexus [Aula 72]}
--sign in nexus
--create user jenkins (as admin)
--install docker-repo (docker-hosted)
-    -custom http port for docker repo: 8123
-
-cd /var/lib/jenkins/workspace
-cp -r redis.app /root
-cd /root
-docker build -t devops-app .
-docker login localhost:8123 (input user and password)
-docker tag devops-app:latest localhost:8123/devops-app
-docker push localhost:8123/devops-app
-
-{config jenkins to use nexus [Aula 74]}
-
-
-
- 
+k apply -f #File_name
+k get po
+k get deployment
+k get describe deployment #conteiner
+k get describe pods #pod_name
+k get service
+k create namespace devops
