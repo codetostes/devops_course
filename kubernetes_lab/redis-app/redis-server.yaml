@@ -1,0 +1,41 @@
+--- ## Deployment Object
+apiVersison: apps/v1
+kind: Deployment
+metadata:
+    name: redis-server
+    namespace: devops
+    labels:
+        app: redis
+spec:
+    selector:
+        matchLabels:
+            app: redis
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: redis
+    spec:
+        containers:
+            -   name: redis-server
+                image: redis
+                resources:
+                    requests:
+                        cpu: 100m
+                        Mmemory: 100Mi
+                ports:
+                -   containterPort: 6379
+--- ## Service Object
+apiVersion: v1
+kind: Service
+metadata:
+    name: redis-service
+    namespace: devops
+    labels:
+        app: redis
+spec:
+    ports:
+    -   port: 6379
+        targetPort: 6379
+    selector:
+        app: redis
