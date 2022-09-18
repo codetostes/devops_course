@@ -22,14 +22,14 @@ spec:
                     resources:
                         requests:
                             cpu: 100m
-                            Mmemory: 100Mi
+                            memory: 100Mi
                     ports:
-                    -   containterPort: 6379
+                    -   containerPort: 6379
 --- ## Service Object
 apiVersion: v1
 kind: Service
 metadata:
-    name: redis-service
+    name: redis-server
     namespace: devops
     labels:
         app: redis

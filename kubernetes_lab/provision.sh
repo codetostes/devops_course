@@ -4,10 +4,19 @@
 yum install wget unzip net-tools telnet git -y
 
 # Install cluster k3s
-curl -SfL https://get.k3s.io | sh -s --cluster-init --tls-san 10.10.0.2 --node-ip 10.10.0.2 --node-external-ip 10.10.0.2
+curl -sfL https://get.k3s.io | sh -s - --cluster-init --tls-san 10.10.0.2 --node-ip 10.10.0.2 --node-external-ip 10.10.0.2
 
-# Export kubectl path
+# Put /usr/local/bin in PATH
+echo 'export PATH=$PATH:/usr/local/bin' >> /etc/profile
+
+# Create kubectl alias
 echo 'alias k=kubectl' >> /etc/profile
+
+# bashrc to reload profile
+echo 'source /etc/profile' >> ~/.bashrc
+
+# Reload bashrc
+source ~/.bashrc
 
 # Install kube context to better mamagement
 git clone https://github.com/ahmetb/kubectx /opt/kubectx
@@ -26,12 +35,12 @@ cat << EOT >> /etc/rancher/k3s/registries.yaml
 mirrors:
   docker.io:
     endpoint:
-      - "https://10.10.0.5:8123"
+      - "http://10.10.0.5:8123"
 configs:
   "10.10.0.5:8123":
     auth:
       username: jenkins
-      password: 12345
+      password: jenkins
 EOT
 
 # Restart Services
