@@ -17,22 +17,22 @@ spec:
         app: redis-app
     spec:
       containers:
-        - name: devops-app
-          image: devops/app:latest
-          resources:
-            requests:
-              cpu: 100m
-              memory: 64Mi
-            limits:
-              cpu: 500m
-              memory: 128Mi
-          ports:
-          - containerPort:  8081
---- ## Service Deployment
+      - name: devops-app
+        image: devops/app:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
+        ports:
+        - containerPort:  8081
+--- ## Service Object
 apiVersion: v1
 kind: Service
 metadata:
-  name: redis-app-service
+  name: redis-app
   namespace: devops
   labels:
     app: redis-app
@@ -47,7 +47,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: devops-app-ingress
+  name: devops-app
   namespace: devops
   annotations:
     kubernetes.io/ingress.class: "traefik"
@@ -60,6 +60,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: redis-app-service
+              name: redis-app
               port:
                 number: 8081
