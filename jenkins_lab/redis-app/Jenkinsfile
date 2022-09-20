@@ -55,5 +55,11 @@ pipeline {
                 }
             }
         }
+        stage('Deploy app on k3s'){
+            steps{
+                sh '/usr/local/bin/kubectl apply -f ./k3s/redis-server.yaml'
+                sh '/usr/local/bin/kubectl apply -f ./k3s/redis-app.yaml'
+            }
+        }
     }
 }
