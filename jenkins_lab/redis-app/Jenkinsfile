@@ -34,7 +34,7 @@ pipeline {
                 sh './test-app.sh'
             }            
         }
-        stage('Shutdown test containers'){
+        stage('Shutdown containers'){
             steps{
                 sh 'docker-compose down'
             }            
