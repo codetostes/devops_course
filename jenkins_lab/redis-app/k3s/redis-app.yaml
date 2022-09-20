@@ -1,0 +1,65 @@
+--- ## Deployment Object
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-app
+  namespace: devops
+  labels:
+    app: redis-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: redis-app
+  template:
+    metadata:
+      labels:
+        app: redis-app
+    spec:
+      containers:
+      - name: devops-app
+        image: devops/app:latest
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 500m
+            memory: 128Mi
+        ports:
+        - containerPort:  8081
+--- ## Service Object
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-app
+  namespace: devops
+  labels:
+    app: redis-app
+spec:
+  ports:
+  - port: 8081
+    targetPort: 8081
+    name: tcp
+  selector:
+    app: redis-app
+--- ## Ingress Object
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: devops-app
+  namespace: devops
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  rules:
+  - host: "www.10.10.0.2.sslip.io"
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: redis-app
+              port:
+                number: 8081
