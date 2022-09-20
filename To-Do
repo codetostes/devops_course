@@ -1,7 +1,14 @@
-k apply -f #File_name
-k get po
-k get deployment
-k get describe deployment #conteiner
-k get describe pods #pod_name
-k get service
-k create namespace devops
+# install kubectl jenkins host
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+kubectl version --client
+
+# Connect jenkins kubectl to k3s cluster
+cat /etc/rancher/k3s/k3s.yaml ## on k3s cluster
+usermod -s /bin/bash jenkins ## give jenkins a home folder
+su -s /bin/bash jenkins ## Open Bash for jenkins user
+sudo su - jenkins
+mkdir ~/.kube
+vi ~/.kube/config ## paste k3s.yame content // change server IP 10.10.0.2
+
+
