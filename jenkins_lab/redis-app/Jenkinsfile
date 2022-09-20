@@ -6,28 +6,23 @@ pipeline {
                 sh 'docker build -t devops/app .'
             }
         }
-        stage('Up test containers- redis and app'){
+        stage('Up containers - redis and app'){
             steps{
                 sh 'docker-compose up --build -d'
+                sleep (15)
             }
         }
-        stage('Wait for container go up'){
-            steps{
-                sh 'sleep 15'
-            }
-        }
-        stage('SonarQube validation'){
+        stage('SonarQube verification'){
             steps{
                 script{
                     scannerHome = tool 'sonar-scanner';
                 }
                 withSonarQubeEnv('sonar-server'){
                     sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=redis-app -Dsonar.sources=. -Dsonar.host.url=${env.SONAR_HOST_URL} -Dsonar.login=${env.SONAR_AUTH_TOKEN}"
-
                 }
             }
         }
-        stage('QualityGate'){
+        stage('QualityGate validation'){
             steps{
                 sleep (20)
                 waitForQualityGate abortPipeline: true
@@ -55,7 +50,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy app on k3s'){
+        stage('Deploy application on k3s'){
             steps{
                 sh '/usr/local/bin/kubectl apply -f ./k3s/redis-server.yaml'
                 sh '/usr/local/bin/kubectl apply -f ./k3s/redis-app.yaml'
